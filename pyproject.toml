@@ -1,15 +1,24 @@
 [project]
 name = "elastic-transfer"
 version = "0.1.0"
-description = ""
+description = "Migrate an Elasticsearch index from an origin cluster to a destination cluster"
 authors = [
-    {name = "Joise Garcia",email = "ec20@esmax.cl"}
+    {name = "Joise Garcia", email = "ec20@esmax.cl"}
 ]
 requires-python = ">=3.11"
 dependencies = [
+    "elasticsearch (>=8.0.0,<9.0.0)",
+    "python-dotenv>=1.0.0",
+    "tqdm>=4.66.0",
 ]
+readme = "README.md"
 
+[project.scripts]
+elastic-transfer = "elastic_transfer.cli:main"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+packages = [{include = "elastic_transfer"}]
