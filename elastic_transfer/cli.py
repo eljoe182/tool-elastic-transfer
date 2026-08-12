@@ -82,15 +82,26 @@ def run(index: str, recreate: bool) -> int:
     destination = create_client(config.destination)
 
     try:
-        if not index_exists(origin, index):
-            print(f"Error: origin index '{index}' does not exist.", file=sys.stderr)
-            return 1
+        try:
+            if not index_exists(origin, index):
+                print(f"Error: origin index '{index}' does not exist.", file=sys.stderr)
+                return 1
+        except Exception as exc:
+            raise RuntimeError(f"Failed talking to origin cluster: {exc}") from exc
 
         print(f"Origin index '{index}' found.")
-        prepare_destination(origin, destination, index, recreate=recreate)
+
+        try:
+            prepare_destination(origin, destination, index, recreate=recreate)
+        except Exception as exc:
+            raise RuntimeError(f"Failed preparing destination cluster: {exc}") from exc
 
         print(f"Starting transfer for '{index}'...")
-        transferred = transfer_documents(origin, destination, index)
+        try:
+            transferred = transfer_documents(origin, destination, index)
+        except Exception as exc:
+            raise RuntimeError(f"Failed during document transfer: {exc}") from exc
+
         print(f"Done. Transferred {transferred} document(s) to '{index}'.")
         return 0
     finally:

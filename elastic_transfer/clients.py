@@ -12,6 +12,9 @@ def create_client(config: ClusterConfig) -> Elasticsearch:
     return Elasticsearch(
         config.url,
         basic_auth=(config.username, config.password),
-        verify_certs=True,
+        verify_certs=config.verify_certs,
+        ssl_show_warn=config.verify_certs,
         request_timeout=120,
+        max_retries=3,
+        retry_on_timeout=True,
     )

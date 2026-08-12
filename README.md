@@ -20,12 +20,16 @@ poetry install
 
 | Variable | Description |
 |---|---|
-| `ELASTICSEARCH_URL_ORIGIN` | Origin cluster URL |
+| `ELASTICSEARCH_URL_ORIGIN` | Origin cluster URL (`http://` or `https://`) |
 | `ELASTICSEARCH_USERNAME_ORIGIN` | Origin username |
 | `ELASTICSEARCH_PASSWORD_ORIGIN` | Origin password |
-| `ELASTICSEARCH_URL_DESTINATION` | Destination cluster URL |
+| `ELASTICSEARCH_VERIFY_CERTS_ORIGIN` | Verify TLS certs for origin (`true`/`false`, default `true`) |
+| `ELASTICSEARCH_URL_DESTINATION` | Destination cluster URL (`http://` or `https://`) |
 | `ELASTICSEARCH_USERNAME_DESTINATION` | Destination username |
 | `ELASTICSEARCH_PASSWORD_DESTINATION` | Destination password |
+| `ELASTICSEARCH_VERIFY_CERTS_DESTINATION` | Verify TLS certs for destination (`true`/`false`, default `true`) |
+
+For local clusters behind `kubectl port-forward` with HTTPS and a self-signed certificate, use `https://` in the URL and set `ELASTICSEARCH_VERIFY_CERTS_DESTINATION=false`.
 
 ## Usage
 

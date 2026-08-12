@@ -17,11 +17,19 @@ REQUIRED_VARS = (
 )
 
 
+def _env_bool(name: str, default: bool = True) -> bool:
+    raw = os.getenv(name)
+    if raw is None or raw.strip() == "":
+        return default
+    return raw.strip().lower() in {"1", "true", "yes", "on"}
+
+
 @dataclass(frozen=True)
 class ClusterConfig:
     url: str
     username: str
     password: str
+    verify_certs: bool = True
 
 
 @dataclass(frozen=True)
@@ -44,10 +52,12 @@ def load_config(env_file: str | None = None) -> AppConfig:
             url=os.environ["ELASTICSEARCH_URL_ORIGIN"],
             username=os.environ["ELASTICSEARCH_USERNAME_ORIGIN"],
             password=os.environ["ELASTICSEARCH_PASSWORD_ORIGIN"],
+            verify_certs=_env_bool("ELASTICSEARCH_VERIFY_CERTS_ORIGIN", True),
         ),
         destination=ClusterConfig(
             url=os.environ["ELASTICSEARCH_URL_DESTINATION"],
             username=os.environ["ELASTICSEARCH_USERNAME_DESTINATION"],
             password=os.environ["ELASTICSEARCH_PASSWORD_DESTINATION"],
+            verify_certs=_env_bool("ELASTICSEARCH_VERIFY_CERTS_DESTINATION", True),
         ),
     )
