@@ -86,3 +86,14 @@ def create_index_from_origin(
 ) -> None:
     settings, mappings = get_index_definition(origin, index)
     create_index(destination, index, settings, mappings)
+
+
+def list_indices(client: Elasticsearch) -> list[dict[str, str]]:
+    """Return all indices with health, status, doc count, and store size."""
+    return client.cat.indices(
+        index="*",
+        format="json",
+        h="index,health,status,docs.count,store.size",
+        s="index",
+        expand_wildcards="all",
+    )
